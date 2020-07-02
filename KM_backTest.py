@@ -128,7 +128,7 @@ def main():
             print('Goodbye!')
             break
         else:
-            print("Please enter 1 - 4 or q to q\n")
+            print("Please enter 1 - 7 or q to q\n")
             
 
 if __name__ == "__main__":

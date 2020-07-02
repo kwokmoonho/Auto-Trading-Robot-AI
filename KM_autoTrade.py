@@ -236,6 +236,8 @@ def breakTSignal(ohlc, l_s):
 
 
 def lstm_trade_signal(lstm_df, l_s):
+    #lstm_df = lstm_predict(lstm_auto_list.get(stock), ohlc[stock])
+    #l_s = long_short
     signal = ""
     df = copy.deepcopy(lstm_df)
     if l_s == "":
@@ -254,7 +256,7 @@ def lstm_trade_signal(lstm_df, l_s):
     elif l_s == "Buy":
         if df["Prediction"].tolist()[-1] < df["Prediction"].tolist()[-2]:
             #stop lost
-            signal = "Close_Sell"
+            signal = "Close_Buy"
             print()
             print(df["Prediction"].tolist()[-1])
             print(df["Prediction"].tolist()[-2])
@@ -266,7 +268,7 @@ def lstm_trade_signal(lstm_df, l_s):
             print()
     elif l_s == 'Sell':
         if df["Prediction"].tolist()[-1] > df["Prediction"].tolist()[-2]:
-            signal = "Close_Buy"
+            signal = "Close_Sell"
             print()
             print(df["Prediction"].tolist()[-1])
             print(df["Prediction"].tolist()[-2])
@@ -341,14 +343,14 @@ def auto_trade(lstm_list):
                 print('Existing Short position closed for ', stock)
                 print()
             elif signal == 'Close_Sell':
-                con.submit_order(symbol = stock, qty = open_pos_sk[0].qty, side='buy',type='market',time_in_force='gtc')
+                con.submit_order(symbol = stock, qty = int(open_pos_sk[0].qty) * -1, side='buy',type='market',time_in_force='gtc')
                 print('Existing long position closed for ', stock)
                 print()
             else:
                 print('No action taken for ', stock)
                 print()
 
-    except:
+    except: 
         print("error encountered....skipping this iteration\n")
         print()
         print()
